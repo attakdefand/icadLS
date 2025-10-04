@@ -51,8 +51,21 @@ If you encounter any issues, refer to the [TROUBLESHOOTING.md](TROUBLESHOOTING.m
 - `services/analyzer-api`: REST API for analysis services
 - `services/tools/analyze-algos`: Command-line analysis tools
 - `clients/web-advisor-wasm`: Web-based advisor interface
+  - `index.html`: Main web interface file
+  - `src/lib.rs`: Yew application logic
 - `infra`: Docker configuration for deployment
 - `examples`: Sample code for testing
+
+## Web Interface
+
+The web interface is built with:
+- [Yew](https://yew.rs/) - Rust framework for creating multi-threaded front-end web apps with WebAssembly
+- [WebAssembly](https://webassembly.org/) - For running Rust code in the browser
+- Modern CSS with responsive design
+
+To customize the web interface, modify:
+- `clients/web-advisor-wasm/index.html` - Main HTML structure and styling
+- `clients/web-advisor-wasm/src/lib.rs` - Application logic
 
 ## Verification Scripts
 
