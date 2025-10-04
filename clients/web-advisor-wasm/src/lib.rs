@@ -1,4 +1,3 @@
-use yew::prelude::*;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::JsFuture;
 use wasm_bindgen::prelude::*;
@@ -49,7 +48,7 @@ pub fn main() {
 fn initialize_app() {
     // Check API status
     let window = web_sys::window().unwrap();
-    let document = window.document().unwrap();
+    let _document = window.document().unwrap();
     
     // Set a timeout to simulate API connection and update status
     let callback = Closure::once_into_js(move || {
@@ -82,16 +81,16 @@ fn initialize_app() {
                 analyze_code();
             }) as Box<dyn FnMut()>);
             
-            let func: Function = analyze_callback.as_ref().unchecked_ref().clone();
-            let _ = btn.add_event_listener_with_callback("click", &func);
+            let func: &Function = analyze_callback.as_ref().unchecked_ref();
+            let _ = btn.add_event_listener_with_callback("click", &func.clone());
             
             // Keep the callback alive by forgetting it
             analyze_callback.forget();
         }
     });
     
-    let func: Function = callback.as_ref().unchecked_ref();
-    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func, 1500).unwrap();
+    let func: &Function = callback.as_ref().unchecked_ref();
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func.clone(), 1500).unwrap();
 }
 
 // Function to analyze code when the button is clicked
@@ -132,7 +131,7 @@ fn analyze_code() {
 // Function to show demo results for GitHub Pages
 fn show_demo_results() {
     let window = web_sys::window().unwrap();
-    let document = window.document().unwrap();
+    let _document = window.document().unwrap();
     
     // Simulate analysis delay
     let callback = Closure::once_into_js(move || {
@@ -140,8 +139,8 @@ fn show_demo_results() {
         update_ui_with_results(Ok(result));
     });
     
-    let func: Function = callback.as_ref().unchecked_ref();
-    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func, 1500).unwrap();
+    let func: &Function = callback.as_ref().unchecked_ref();
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func.clone(), 1500).unwrap();
 }
 
 // Function to create demo results
@@ -293,8 +292,8 @@ fn update_ui_with_results(result: Result<AnalysisResult, String>) {
     
     // Scroll to results
     if let Some(container) = document.get_element_by_id("results-container") {
-        let mut options = ScrollIntoViewOptions::new();
-        options.behavior(ScrollBehavior::Smooth);
+        let options = ScrollIntoViewOptions::new();
+        options.set_behavior(ScrollBehavior::Smooth);
         let _ = container.scroll_into_view_with_scroll_into_view_options(&options);
     }
 }
@@ -314,7 +313,7 @@ async fn call_analyze_api(code: &str) -> Result<AnalysisResult, String> {
         "http://localhost:8081/analyze".to_string()
     };
     
-    let mut opts = web_sys::RequestInit::new();
+    let opts = web_sys::RequestInit::new();
     opts.set_method("POST");
     opts.set_mode(web_sys::RequestMode::Cors);
     
