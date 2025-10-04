@@ -181,6 +181,15 @@
             background-color: #4b5563;
         }
 
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
         .result-section {
             margin-top: 30px;
         }
@@ -421,6 +430,44 @@
             overflow-x: auto;
         }
 
+        .cloud-deployment {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .cloud-deployment h3 {
+            margin-top: 0;
+            color: var(--success-color);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -464,12 +511,73 @@
                     </div>
                 </div>
                 
-                <div class="github-pages-note">
-                    <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
-                    <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
-                    
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('demo')">Demo Version</div>
+                    <div class="tab" onclick="switchTab('cloud')">Cloud Deployment</div>
+                    <div class="tab" onclick="switchTab('local')">Local Setup</div>
+                </div>
+                
+                <div id="demo-tab" class="tab-content active">
+                    <div class="github-pages-note">
+                        <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
+                        <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-success" onclick="switchTab('cloud')">
+                                <i class="fas fa-cloud"></i> Try Cloud Version
+                            </button>
+                            <button class="btn btn-primary" style="margin-left: 10px;" onclick="switchTab('local')">
+                                <i class="fas fa-desktop"></i> Run Locally
+                            </button>
+                        </div>
+                        
+                        <p><strong>Try it now:</strong> Enter your code below and click "Analyze Code" to see sample results.</p>
+                    </div>
+                </div>
+                
+                <div id="cloud-tab" class="tab-content">
+                    <div class="cloud-deployment">
+                        <h3><i class="fas fa-cloud"></i> Cloud Deployment Options</h3>
+                        <p>To enable real code analysis on GitHub Pages, deploy the API to a cloud service:</p>
+                        
+                        <div class="setup-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    Deploy the API to a cloud service (examples):
+                                    <ul>
+                                        <li><strong>Railway</strong>: Easy deployment with free tier</li>
+                                        <li><strong>Heroku</strong>: Popular platform-as-a-service</li>
+                                        <li><strong>AWS</strong>: Amazon Web Services</li>
+                                        <li><strong>DigitalOcean</strong>: Simple cloud hosting</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    Update the API endpoint in the web interface code:
+                                    <div class="command">
+                                        // In src/lib.rs, change the API URL to your deployed service
+                                        let api_url = "https://your-deployed-api.example.com/analyze";
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    Redeploy the GitHub Pages site with the updated configuration
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Note:</strong> This requires setting up a database and configuring environment variables for the deployed API.</p>
+                    </div>
+                </div>
+                
+                <div id="local-tab" class="tab-content">
                     <div class="setup-steps">
-                        <h4>Run ICALDS Locally:</h4>
+                        <h4><i class="fas fa-desktop"></i> Run ICALDS Locally</h4>
                         <div class="step">
                             <div class="step-number">1</div>
                             <div class="step-content">
@@ -511,8 +619,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <p><strong>Try it now:</strong> Enter your code below and click "Analyze Code" to see sample results.</p>
                 </div>
                 
                 <div id="api-status" class="api-status">
@@ -627,7 +733,7 @@ fn main() {
                             <li>Consider using more efficient sorting algorithms like Quick Sort or Merge Sort for larger datasets</li>
                             <li>The current implementation has O(n²) time complexity</li>
                             <li>For better performance with large arrays, consider using the built-in sort() method</li>
-                            <li><strong>To analyze your own code:</strong> Follow the setup instructions above to run ICALDS locally</li>
+                            <li><strong>To analyze your own code:</strong> Try the Cloud Deployment or Local Setup options above</li>
                         </ul>
                     </div>
                 </div>
@@ -644,6 +750,25 @@ fn main() {
     <div id="root"></div>
 
     <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
         // Simple JavaScript to handle the demo functionality
         document.addEventListener('DOMContentLoaded', function() {
             const analyzeBtn = document.getElementById('analyze-btn');
