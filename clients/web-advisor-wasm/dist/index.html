@@ -9,8 +9,8 @@
     <title>ICALDS - Comprehensive Code Analyzer</title>
     
 <script type="module">
-import init, * as bindings from '/web-advisor-wasm-86d586a9100540e5.js';
-const wasm = await init({ module_or_path: '/web-advisor-wasm-86d586a9100540e5_bg.wasm' });
+import init, * as bindings from '/web-advisor-wasm-3f3c63f5dcae6cf4.js';
+const wasm = await init({ module_or_path: '/web-advisor-wasm-3f3c63f5dcae6cf4_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -183,6 +183,24 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             font-size: 18px;
         }
 
+        .btn-secondary {
+            background-color: var(--gray-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
         .result-section {
             margin-top: 30px;
         }
@@ -342,7 +360,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
         .github-pages-note {
             background-color: rgba(59, 130, 246, 0.1);
             border-left: 4px solid var(--primary-color);
-            padding: 15px;
+            padding: 20px;
             border-radius: 4px;
             margin: 20px 0;
         }
@@ -358,6 +376,107 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
         .github-pages-note li {
             margin-bottom: 10px;
+        }
+
+        .setup-steps {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .setup-steps h4 {
+            margin-top: 0;
+            color: var(--dark-color);
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .copy-btn {
+            background-color: var(--gray-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .command {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .cloud-deployment {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .cloud-deployment h3 {
+            margin-top: 0;
+            color: var(--success-color);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -378,7 +497,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             }
         }
     </style>
-<link rel="modulepreload" href="/web-advisor-wasm-86d586a9100540e5.js" crossorigin="anonymous" integrity="sha384-65AaKhL1rxS4CCkjUetgJDv7IdzwjfX41aRNga6RuW1nDv3vp3zCt2l4cahkTf3Z"><link rel="preload" href="/web-advisor-wasm-86d586a9100540e5_bg.wasm" crossorigin="anonymous" integrity="sha384-vubeorXGhsJYFOhDSgvOaRdJ7jUv/o8TP9bZXqz6upcAQSunyfhf+6CzjG1nrOPs" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/web-advisor-wasm-3f3c63f5dcae6cf4.js" crossorigin="anonymous" integrity="sha384-fCLSUuxauI/1dI1ZCSvuJp/livrJq81k1YHFa3Z4HzghsfDiUnW3N3raT+GgQA0G"><link rel="preload" href="/web-advisor-wasm-3f3c63f5dcae6cf4_bg.wasm" crossorigin="anonymous" integrity="sha384-RJYbrU9Cjjuv0BO/ONGWZE80P79u+wmFujHouWNyvFOWV3asQHE+iL7cqtY/9gWk" as="fetch" type="application/wasm"></head>
 <body>
     <div class="container">
         <header>
@@ -403,18 +522,118 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
                     </div>
                 </div>
                 
-                <div class="github-pages-note">
-                    <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
-                    <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
-                    <ul>
-                        <li>Clone the repository and run it locally with the API server</li>
-                        <li>Or check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for installation instructions</li>
-                    </ul>
-                    <p>Click "Analyze Code" below to see sample analysis results.</p>
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('demo')">Demo Version</div>
+                    <div class="tab" onclick="switchTab('cloud')">Cloud Deployment</div>
+                    <div class="tab" onclick="switchTab('local')">Local Setup</div>
+                </div>
+                
+                <div id="demo-tab" class="tab-content active">
+                    <div class="github-pages-note">
+                        <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
+                        <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-success" onclick="switchTab('cloud')">
+                                <i class="fas fa-cloud"></i> Try Cloud Version
+                            </button>
+                            <button class="btn btn-primary" style="margin-left: 10px;" onclick="switchTab('local')">
+                                <i class="fas fa-desktop"></i> Run Locally
+                            </button>
+                        </div>
+                        
+                        <p><strong>Try it now:</strong> Enter your code below and click "Analyze Code" to see sample results.</p>
+                    </div>
+                </div>
+                
+                <div id="cloud-tab" class="tab-content">
+                    <div class="cloud-deployment">
+                        <h3><i class="fas fa-cloud"></i> Cloud Deployment Options</h3>
+                        <p>To enable real code analysis on GitHub Pages, deploy the API to a cloud service:</p>
+                        
+                        <div class="setup-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    Deploy the API to a cloud service (examples):
+                                    <ul>
+                                        <li><strong>Railway</strong>: Easy deployment with free tier</li>
+                                        <li><strong>Heroku</strong>: Popular platform-as-a-service</li>
+                                        <li><strong>AWS</strong>: Amazon Web Services</li>
+                                        <li><strong>DigitalOcean</strong>: Simple cloud hosting</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    Update the API endpoint in the web interface code:
+                                    <div class="command">
+                                        // In src/lib.rs, change the API URL to your deployed service
+                                        let api_url = "https://your-deployed-api.example.com/analyze";
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    Redeploy the GitHub Pages site with the updated configuration
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Note:</strong> This requires setting up a database and configuring environment variables for the deployed API.</p>
+                    </div>
+                </div>
+                
+                <div id="local-tab" class="tab-content">
+                    <div class="setup-steps">
+                        <h4><i class="fas fa-desktop"></i> Run ICALDS Locally</h4>
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                Clone the repository:
+                                <div class="command">
+                                    git clone https://github.com/attakdefand/icadLS.git
+                                    <button class="copy-btn" onclick="copyToClipboard('git clone https://github.com/attakdefand/icadLS.git')">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                Navigate to the project directory:
+                                <div class="command">
+                                    cd icadLS
+                                    <button class="copy-btn" onclick="copyToClipboard('cd icadLS')">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                Run the services (requires two terminals):
+                                <div class="command">
+                                    # Terminal 1: Start the API server
+                                    cd services/analyzer-api && cargo run
+                                </div>
+                                <div class="command">
+                                    # Terminal 2: Start the web interface
+                                    cd clients/web-advisor-wasm && trunk serve --port 8082
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                Open your browser at <a href="http://localhost:8082" target="_blank">http://localhost:8082</a> and start analyzing code!
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="api-status" class="api-status">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-info-circle"></i>
                     <span>Demo Mode - Sample Results</span>
                 </div>
                 
@@ -460,6 +679,10 @@ fn main() {
                         <i class="fas fa-search"></i>
                         Analyze Code
                     </button>
+                    <a href="https://github.com/attakdefand/icadLS" target="_blank" class="btn btn-secondary btn-lg" style="margin-left: 10px;">
+                        <i class="fab fa-github"></i>
+                        View on GitHub
+                    </a>
                 </div>
             </div>
             
@@ -521,7 +744,7 @@ fn main() {
                             <li>Consider using more efficient sorting algorithms like Quick Sort or Merge Sort for larger datasets</li>
                             <li>The current implementation has O(n²) time complexity</li>
                             <li>For better performance with large arrays, consider using the built-in sort() method</li>
-                            <li>Check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for the full interactive version</li>
+                            <li><strong>To analyze your own code:</strong> Try the Cloud Deployment or Local Setup options above</li>
                         </ul>
                     </div>
                 </div>
@@ -538,6 +761,25 @@ fn main() {
     <div id="root"></div>
 
     <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
         // Simple JavaScript to handle the demo functionality
         document.addEventListener('DOMContentLoaded', function() {
             const analyzeBtn = document.getElementById('analyze-btn');
@@ -545,6 +787,7 @@ fn main() {
             
             analyzeBtn.addEventListener('click', function() {
                 // Show loading state
+                const originalHTML = analyzeBtn.innerHTML;
                 analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
                 analyzeBtn.disabled = true;
                 
@@ -554,7 +797,7 @@ fn main() {
                     resultsContainer.style.display = 'block';
                     
                     // Reset button
-                    analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Code';
+                    analyzeBtn.innerHTML = originalHTML;
                     analyzeBtn.disabled = false;
                     
                     // Scroll to results
@@ -562,6 +805,18 @@ fn main() {
                 }, 1500);
             });
         });
+        
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show feedback
+                const originalText = event.target.textContent;
+                event.target.textContent = 'Copied!';
+                setTimeout(function() {
+                    event.target.textContent = originalText;
+                }, 2000);
+            });
+        }
     </script>
 <script>"use strict";
 
@@ -694,4 +949,3 @@ fn main() {
 })()
 </script></body>
 </html>
-```

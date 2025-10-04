@@ -117,7 +117,7 @@ fn analyze_code() {
     
     if is_github_pages {
         // Show demo results
-        show_demo_results(&code);
+        show_demo_results();
     } else {
         // Make actual API call
         let future = async move {
@@ -129,22 +129,21 @@ fn analyze_code() {
 }
 
 // Function to show demo results for GitHub Pages
-fn show_demo_results(code: &str) {
+fn show_demo_results() {
     let window = web_sys::window().unwrap();
-    let _document = window.document().unwrap();
     
     // Simulate analysis delay
     let callback = Closure::once_into_js(move || {
-        let result = create_demo_result(code);
+        let result = create_demo_result();
         update_ui_with_results(Ok(result));
     });
     
     let func: &Function = callback.as_ref().unchecked_ref();
-    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func.clone(), 1500).unwrap();
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(func, 1500).unwrap();
 }
 
-// Function to create demo results based on the code
-fn create_demo_result(_code: &str) -> AnalysisResult {
+// Function to create demo results
+fn create_demo_result() -> AnalysisResult {
     AnalysisResult {
         patterns: vec![
             "Nested loop pattern".to_string(),
@@ -183,7 +182,7 @@ fn create_demo_result(_code: &str) -> AnalysisResult {
             "Consider using more efficient sorting algorithms like Quick Sort or Merge Sort for larger datasets".to_string(),
             "The current implementation has O(n²) time complexity".to_string(),
             "For better performance with large arrays, consider using the built-in sort() method".to_string(),
-            "To analyze your own code: Follow the setup instructions to run ICALDS locally".to_string()
+            "To analyze your own code: Try the Cloud Deployment or Local Setup options".to_string()
         ]
     }
 }
