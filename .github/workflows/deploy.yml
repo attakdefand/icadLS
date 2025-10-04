@@ -37,7 +37,7 @@ jobs:
       - name: Build WASM client
         working-directory: clients/web-advisor-wasm
         run: |
-          trunk build --release --public-url /icadLS/
+          trunk build --release --public-url /icadLS
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
