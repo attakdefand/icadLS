@@ -2,6 +2,8 @@ use yew::prelude::*;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::JsFuture;
 use wasm_bindgen::prelude::*;
+use js_sys::Function;
+use web_sys::{ScrollIntoViewOptions, ScrollBehavior};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 struct CodeAnalysis {
@@ -50,7 +52,7 @@ fn initialize_app() {
     let document = window.document().unwrap();
     
     // Set a timeout to simulate API connection and update status
-    let timeout_callback = Closure::wrap(Box::new(move || {
+    let callback = Closure::once_into_js(move || {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
         
@@ -75,25 +77,21 @@ fn initialize_app() {
         // Add event listener to the analyze button
         if let Some(btn) = document.get_element_by_id("analyze-btn") {
             let btn: &web_sys::HtmlElement = btn.dyn_ref().unwrap();
+            
             let analyze_callback = Closure::wrap(Box::new(move || {
                 analyze_code();
             }) as Box<dyn FnMut()>);
             
-            let _ = btn.add_event_listener_with_callback("click", 
-                analyze_callback.as_ref().unchecked_ref());
+            let func: Function = analyze_callback.as_ref().unchecked_ref().clone();
+            let _ = btn.add_event_listener_with_callback("click", &func);
             
-            // Keep the callback alive
+            // Keep the callback alive by forgetting it
             analyze_callback.forget();
         }
-    }) as Box<dyn FnMut()>);
+    });
     
-    window.set_timeout_with_callback_and_timeout_and_arguments_0(
-        timeout_callback.as_ref().unchecked_ref(), 
-        1500
-    ).unwrap();
-    
-    // Forget the closure to keep it alive
-    timeout_callback.forget();
+    let func: Function = callback.as_ref().unchecked_ref();
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func, 1500).unwrap();
 }
 
 // Function to analyze code when the button is clicked
@@ -137,17 +135,13 @@ fn show_demo_results() {
     let document = window.document().unwrap();
     
     // Simulate analysis delay
-    let timeout_callback = Closure::wrap(Box::new(move || {
+    let callback = Closure::once_into_js(move || {
         let result = create_demo_result();
         update_ui_with_results(Ok(result));
-    }) as Box<dyn FnMut()>);
+    });
     
-    window.set_timeout_with_callback_and_timeout_and_arguments_0(
-        timeout_callback.as_ref().unchecked_ref(), 
-        1500
-    ).unwrap();
-    
-    timeout_callback.forget();
+    let func: Function = callback.as_ref().unchecked_ref();
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(&func, 1500).unwrap();
 }
 
 // Function to create demo results
@@ -299,9 +293,9 @@ fn update_ui_with_results(result: Result<AnalysisResult, String>) {
     
     // Scroll to results
     if let Some(container) = document.get_element_by_id("results-container") {
-        let _ = container.scroll_into_view_with_scroll_into_view_options(
-            web_sys::ScrollIntoViewOptions::new().behavior(web_sys::ScrollBehavior::Smooth)
-        );
+        let mut options = ScrollIntoViewOptions::new();
+        options.behavior(ScrollBehavior::Smooth);
+        let _ = container.scroll_into_view_with_scroll_into_view_options(&options);
     }
 }
 
