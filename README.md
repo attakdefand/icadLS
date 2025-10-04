@@ -4,8 +4,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.70%2B-blue.svg)](https://www.rust-lang.org/)
 
-![Demo](https://raw.githubusercontent.com/attakdefand/icadLS/main/docs/assets/demo.gif)
-
 ICALDS (Intelligent Code Analysis and Learning Detection System) is an advanced tool for analyzing and identifying various codes, algorithms, and data structures. The project provides:
 
 - A web-based advisor interface for interactive analysis
