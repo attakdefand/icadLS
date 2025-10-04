@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: icalds
+      MYSQL_USER: icalds_user
+      MYSQL_PASSWORD: icalds_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  api:
+    build: 
+      context: ./../services/analyzer-api
+      dockerfile: Dockerfile
+    ports: 
+      - "8081:8081"
+    environment:
+      - RUST_LOG=info
+      - DATABASE_URL=mysql://icalds_user:icalds_password@db:3306/icalds
+    command: ["cargo", "run"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    image: ghcr.io/trunk-rs/trunk:latest
+    working_dir: /app
+    volumes: 
+      - ../clients/web-advisor-wasm:/app
+    command: ["serve", "--address", "0.0.0.0", "--port", "8080", "--open", "false"]
+    ports: 
+      - "8080:8080"
+
+volumes:
+  mysql_data:

@@ -1,0 +1,23 @@
+[package]
+name = "web-advisor-wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+yew = { version = "0.21", features = ["csr"] }
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+gloo = "0.10"
+web-sys = "0.3"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+
+[profile.release]
+strip = "symbols"
+lto = "thin"
+codegen-units = 1

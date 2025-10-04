@@ -1,0 +1,29 @@
+[workspace]
+members = [
+    "services/analyzer-api",
+    "services/tools/analyze-algos",
+    "clients/web-advisor-wasm",
+]
+resolver = "2"
+
+[profile.dev]
+opt-level = 1  # Basic optimizations for faster builds
+strip = "debuginfo"  # Remove debug info to reduce binary size
+debug = true
+debug-assertions = true
+overflow-checks = true
+
+[profile.release]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = "thin"
+strip = "symbols"  # Remove symbols to reduce binary size
+
+# Profile for faster development builds
+[profile.dev-fast]
+inherits = "dev"
+opt-level = 2
+debug = false
+strip = "debuginfo"

@@ -1,0 +1,2 @@
+openapi: 3.0.3
+info: {title: analyzer-api, version: '0.1.0'}
