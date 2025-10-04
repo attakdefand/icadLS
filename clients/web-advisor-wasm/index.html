@@ -172,6 +172,15 @@
             font-size: 18px;
         }
 
+        .btn-secondary {
+            background-color: var(--gray-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
         .result-section {
             margin-top: 30px;
         }
@@ -331,7 +340,7 @@
         .github-pages-note {
             background-color: rgba(59, 130, 246, 0.1);
             border-left: 4px solid var(--primary-color);
-            padding: 15px;
+            padding: 20px;
             border-radius: 4px;
             margin: 20px 0;
         }
@@ -347,6 +356,69 @@
 
         .github-pages-note li {
             margin-bottom: 10px;
+        }
+
+        .setup-steps {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .setup-steps h4 {
+            margin-top: 0;
+            color: var(--dark-color);
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .copy-btn {
+            background-color: var(--gray-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .command {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            position: relative;
+            overflow-x: auto;
         }
 
         @media (max-width: 768px) {
@@ -395,15 +467,56 @@
                 <div class="github-pages-note">
                     <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
                     <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
-                    <ul>
-                        <li>Clone the repository and run it locally with the API server</li>
-                        <li>Or check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for installation instructions</li>
-                    </ul>
-                    <p>Click "Analyze Code" below to see sample analysis results.</p>
+                    
+                    <div class="setup-steps">
+                        <h4>Run ICALDS Locally:</h4>
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                Clone the repository:
+                                <div class="command">
+                                    git clone https://github.com/attakdefand/icadLS.git
+                                    <button class="copy-btn" onclick="copyToClipboard('git clone https://github.com/attakdefand/icadLS.git')">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                Navigate to the project directory:
+                                <div class="command">
+                                    cd icadLS
+                                    <button class="copy-btn" onclick="copyToClipboard('cd icadLS')">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                Run the services (requires two terminals):
+                                <div class="command">
+                                    # Terminal 1: Start the API server
+                                    cd services/analyzer-api && cargo run
+                                </div>
+                                <div class="command">
+                                    # Terminal 2: Start the web interface
+                                    cd clients/web-advisor-wasm && trunk serve --port 8082
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                Open your browser at <a href="http://localhost:8082" target="_blank">http://localhost:8082</a> and start analyzing code!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Try it now:</strong> Enter your code below and click "Analyze Code" to see sample results.</p>
                 </div>
                 
                 <div id="api-status" class="api-status">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-info-circle"></i>
                     <span>Demo Mode - Sample Results</span>
                 </div>
                 
@@ -449,6 +562,10 @@ fn main() {
                         <i class="fas fa-search"></i>
                         Analyze Code
                     </button>
+                    <a href="https://github.com/attakdefand/icadLS" target="_blank" class="btn btn-secondary btn-lg" style="margin-left: 10px;">
+                        <i class="fab fa-github"></i>
+                        View on GitHub
+                    </a>
                 </div>
             </div>
             
@@ -510,7 +627,7 @@ fn main() {
                             <li>Consider using more efficient sorting algorithms like Quick Sort or Merge Sort for larger datasets</li>
                             <li>The current implementation has O(n²) time complexity</li>
                             <li>For better performance with large arrays, consider using the built-in sort() method</li>
-                            <li>Check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for the full interactive version</li>
+                            <li><strong>To analyze your own code:</strong> Follow the setup instructions above to run ICALDS locally</li>
                         </ul>
                     </div>
                 </div>
@@ -534,6 +651,7 @@ fn main() {
             
             analyzeBtn.addEventListener('click', function() {
                 // Show loading state
+                const originalHTML = analyzeBtn.innerHTML;
                 analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
                 analyzeBtn.disabled = true;
                 
@@ -543,7 +661,7 @@ fn main() {
                     resultsContainer.style.display = 'block';
                     
                     // Reset button
-                    analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Code';
+                    analyzeBtn.innerHTML = originalHTML;
                     analyzeBtn.disabled = false;
                     
                     // Scroll to results
@@ -551,7 +669,18 @@ fn main() {
                 }, 1500);
             });
         });
+        
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show feedback
+                const originalText = event.target.textContent;
+                event.target.textContent = 'Copied!';
+                setTimeout(function() {
+                    event.target.textContent = originalText;
+                }, 2000);
+            });
+        }
     </script>
 </body>
 </html>
-```
