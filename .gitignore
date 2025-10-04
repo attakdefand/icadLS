@@ -5,15 +5,19 @@
 # IDEs
 .vscode/
 .idea/
+**/*.swp
+**/*.swo
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Build output
 /dist
 /build
 /trunk
+/pkg
 
 # Environment files
 .env
@@ -24,11 +28,32 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Rust
 **/*.rs.bk
 Cargo.lock
+**/*.rlib
+**/*.rmeta
 
 # WASM
-/pkg
 /node_modules
+*.wasm
+web-advisor-wasm-*.js
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Database
+*.sql
+*.dump
+
+# Coverage
+coverage/
+lcov.info
+
+# Temporary files
+*.tmp
+*.temp
+*~

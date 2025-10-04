@@ -1,128 +1,252 @@
-# Development Guide
+# ICALDS Development Guide
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Development Environment Setup](#development-environment-setup)
+- [Building and Running](#building-and-running)
+- [Testing](#testing)
+- [Code Quality](#code-quality)
+- [Contributing](#contributing)
+- [Architecture](#architecture)
 
 ## Project Structure
 
 ```
 icalds/
-├── clients/
-│   └── web-advisor-wasm/     # Web frontend using Yew/WASM
-├── docs/                     # Documentation
-├── infra/                    # Docker deployment files
 ├── services/
-│   ├── analyzer-api/         # REST API service
+│   ├── analyzer-api/          # REST API service
 │   └── tools/
-│       └── analyze-algos/    # Command-line tool
-└── README.md
+│       └── analyze-algos/     # Command-line tool
+├── clients/
+│   └── web-advisor-wasm/      # Web interface (Yew/WASM)
+├── examples/                  # Sample code files
+├── infra/                     # Docker configuration
+├── docs/                      # Documentation
+├── scripts/                   # Utility scripts
+├── analysis/                  # Analysis tools and configurations
+└── Cargo.toml                 # Workspace configuration
 ```
 
-## Architecture
+## Development Environment Setup
 
-### Analyzer API
+### Prerequisites
 
-The core analysis service is built with:
-- Rust
-- Actix-web framework
-- Serde for serialization
+1. Install Rust (1.70 or later):
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
 
-The API provides two endpoints:
-- `GET /health` - Health check endpoint
-- `POST /analyze` - Code analysis endpoint
+2. Install Trunk for WASM development:
+   ```bash
+   cargo install trunk
+   ```
 
-### Web Advisor
+3. Add the WASM target:
+   ```bash
+   rustup target add wasm32-unknown-unknown
+   ```
 
-The web interface uses:
-- Yew framework (Rust to WASM compilation)
-- Gloo for web APIs
-- Trunk for building and serving
+4. Install Docker (optional, for containerized development)
 
-### Command-line Tool
+5. Install MySQL (optional, for database features)
 
-The CLI tool is built with:
-- Clap for argument parsing
-- Serde for JSON output
+### IDE Recommendations
 
-## Adding New Analysis Capabilities
+- **VS Code** with Rust Analyzer extension
+- **IntelliJ IDEA** with Rust plugin
+- **Vim/Neovim** with rust.vim plugin
 
-### 1. Update the AnalysisResult struct
+## Building and Running
 
-Add new fields to the AnalysisResult struct in all three components:
-- services/analyzer-api/src/main.rs
-- services/tools/analyze-algos/src/main.rs
-- clients/web-advisor-wasm/src/lib.rs
-
-### 2. Implement the analysis logic
-
-Update the `analyze_code_logic` function in all three components to detect your new pattern/algorithm/data structure.
-
-### 3. Update the UI
-
-For the web interface, update the result display component to show your new analysis results.
-
-## Building and Testing
-
-### Running Locally
+### Building the Project
 
 ```bash
-# Run the API service
+# Build all workspace members
+cargo build
+
+# Build in release mode
+cargo build --release
+```
+
+### Running Services
+
+#### REST API Server
+
+```bash
 cd services/analyzer-api
 cargo run
-
-# Run the CLI tool
-cd services/tools/analyze-algos
-cargo run -- --code "fn main() { println!(\"Hello\"); }"
-
-# Run the web interface (requires trunk)
-cd clients/web-advisor-wasm
-trunk serve
 ```
 
-### Running with Docker
+The API will be available at http://localhost:8081
+
+#### Web Interface
 
 ```bash
-cd infra
-docker-compose up
+cd clients/web-advisor-wasm
+trunk serve --port 8082
+```
+
+The web interface will be available at http://localhost:8082
+
+#### Command-Line Tool
+
+```bash
+# Run directly
+cargo run --bin analyze-algos -- --file examples/sample_code.rs
+
+# Or build and run the binary
+cargo build --bin analyze-algos
+./target/debug/analyze-algos --file examples/sample_code.rs
 ```
 
 ## Testing
 
-Currently, the project lacks comprehensive tests. To add tests:
+### Running Tests
 
-1. Create unit tests in each component's `src` directory
-2. Add integration tests in a new `tests` directory
-3. Consider adding end-to-end tests for the web interface
+```bash
+# Run all tests
+cargo test
 
-Example test structure:
+# Run tests for a specific crate
+cargo test -p analyzer-api
+
+# Run tests with verbose output
+cargo test -- --nocapture
+```
+
+### Writing Tests
+
+Tests should follow Rust conventions:
+
+1. Unit tests in the same file as the code (within `#[cfg(test)]` modules)
+2. Integration tests in the `tests/` directory
+3. Clear, descriptive test names
+4. Test edge cases and error conditions
+
+Example test:
+
 ```rust
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_pattern_detection() {
-        let code = "for i in 0..<10 {}";
-        let result = analyze_code_logic(code);
-        assert!(result.patterns.contains(&"Range-based loop".to_string()));
+    fn test_bubble_sort() {
+        let mut data = vec![3, 1, 4, 1, 5];
+        bubble_sort(&mut data);
+        assert_eq!(data, vec![1, 1, 3, 4, 5]);
     }
 }
 ```
 
-## Deployment
+## Code Quality
 
-The project uses Docker Compose for deployment. The docker-compose.yml file defines two services:
-1. `api` - The analyzer API service
-2. `web` - The web interface
+### Formatting
 
-To deploy to production:
-1. Build production-ready Docker images
-2. Update the docker-compose.yml with appropriate resource limits
-3. Add monitoring and logging configurations
-4. Configure a reverse proxy (nginx, traefik) for SSL termination
+Use `rustfmt` to format code:
 
-## Future Improvements
+```bash
+# Format all code
+cargo fmt
 
-1. **Enhanced Analysis**: Implement more sophisticated code analysis using AST parsing
-2. **Machine Learning**: Use ML models to improve pattern recognition
-3. **Language Support**: Add support for languages beyond Rust
-4. **Performance Metrics**: Add execution time and memory usage analysis
-5. **Security Analysis**: Identify potential security vulnerabilities
-6. **Code Quality**: Integrate with existing linting tools
+# Check formatting without making changes
+cargo fmt --all -- --check
+```
+
+### Linting
+
+Use Clippy for additional linting:
+
+```bash
+# Run clippy
+cargo clippy
+
+# Run clippy with error level
+cargo clippy -- -D warnings
+```
+
+### Documentation
+
+Generate documentation:
+
+```bash
+# Generate and open documentation
+cargo doc --open
+```
+
+Ensure all public APIs are documented with examples.
+
+## Contributing
+
+Please see [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed contribution guidelines.
+
+## Architecture
+
+### Overview
+
+ICALDS follows a microservices architecture with three main components:
+
+1. **REST API Service** (`analyzer-api`): Provides HTTP endpoints for code analysis
+2. **Web Interface** (`web-advisor-wasm`): Yew-based WASM application for browser usage
+3. **Command-Line Tool** (`analyze-algos`): Standalone CLI tool for local analysis
+
+### Data Flow
+
+```
+[User Code] → [Analysis Engine] → [Results]
+     ↑              ↓              ↓
+[Input]      [Algorithm Detection] [Output]
+             [Data Structure ID]   
+```
+
+### Key Components
+
+#### Analysis Engine
+
+The core analysis engine is responsible for:
+
+- Parsing Rust code
+- Detecting algorithm patterns
+- Identifying data structures
+- Providing complexity analysis
+- Generating recommendations
+
+#### Database Integration
+
+MySQL is used for persistent storage of:
+
+- Analysis results
+- User preferences (future feature)
+- Historical data (future feature)
+
+#### Web Interface
+
+The web interface is built with:
+
+- Yew framework for WASM-based UI
+- Tailwind CSS for styling
+- REST API for backend communication
+
+### Extending Functionality
+
+#### Adding New Algorithms
+
+1. Add detection logic in the analysis module
+2. Update the algorithm database
+3. Add tests for the new algorithm
+4. Update documentation
+
+#### Adding New Data Structures
+
+1. Implement detection patterns
+2. Add to the data structure catalog
+3. Include educational content
+4. Add tests
+
+### Performance Considerations
+
+- Use efficient parsing algorithms
+- Cache analysis results when appropriate
+- Minimize memory allocations
+- Profile performance regularly

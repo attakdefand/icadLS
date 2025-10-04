@@ -1,6 +1,12 @@
-# ICALDS - Identify Codes, Algorithms, and Data Structures
+# ICALDS - Intelligent Code Analysis and Learning Detection System
 
-ICALDS is a tool for analyzing and identifying various codes, algorithms, and data structures. The project provides:
+[![Build Status](https://github.com/attakdefand/icadLS/workflows/CI/badge.svg)](https://github.com/attakdefand/icadLS/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Rust](https://img.shields.io/badge/rust-1.70%2B-blue.svg)](https://www.rust-lang.org/)
+
+![Demo](https://raw.githubusercontent.com/attakdefand/icadLS/main/docs/assets/demo.gif)
+
+ICALDS (Intelligent Code Analysis and Learning Detection System) is an advanced tool for analyzing and identifying various codes, algorithms, and data structures. The project provides:
 
 - A web-based advisor interface for interactive analysis
 - A REST API for programmatic access
@@ -15,6 +21,10 @@ ICALDS is a tool for analyzing and identifying various codes, algorithms, and da
 - Data structure identification
 - Performance recommendations
 - Persistent storage of analysis results in MySQL database
+
+## Live Demo
+
+Check out the live demo of ICALDS: [https://attakdefand.github.io/icadLS](https://attakdefand.github.io/icadLS)
 
 ## Getting Started
 
@@ -80,3 +90,18 @@ curl -X POST http://localhost:8081/analyze \
   -H "Content-Type: application/json" \
   -d '{"code": "fn main() { let vec = vec![1, 2, 3]; }"}'
 ```
+
+## Documentation
+
+- [User Guide](docs/USER_GUIDE.md) - Instructions for using ICALDS
+- [Development Guide](docs/DEVELOPMENT.md) - Information for contributors
+- [API Documentation](docs/API/openapi.yaml) - REST API specification
+- [Algorithm Detection](docs/ALGORITHM_DETECTION.md) - Details on how algorithms are detected
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

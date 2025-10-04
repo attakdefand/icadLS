@@ -6,6 +6,19 @@ members = [
 ]
 resolver = "2"
 
+[workspace.package]
+name = "icalds"
+version = "1.0.0"
+authors = ["Your Name <your.email@example.com>"]
+edition = "2021"
+description = "Intelligent Code Analysis and Learning Detection System"
+license = "MIT"
+repository = "https://github.com/attakdefand/icadLS"
+homepage = "https://attakdefand.github.io/icadLS"
+documentation = "https://github.com/attakdefand/icadLS/blob/main/README.md"
+keywords = ["code-analysis", "algorithms", "data-structures", "education", "rust"]
+categories = ["development-tools", "education"]
+
 [profile.dev]
 opt-level = 1  # Basic optimizations for faster builds
 strip = "debuginfo"  # Remove debug info to reduce binary size

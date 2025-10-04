@@ -1,2 +1,176 @@
 openapi: 3.0.3
-info: {title: analyzer-api, version: '0.1.0'}
+info:
+  title: ICALDS API
+  description: Intelligent Code Analysis and Learning Detection System API
+  version: 1.0.0
+  contact:
+    name: ICALDS Team
+    url: https://github.com/attakdefand/icadLS
+  license:
+    name: MIT
+    url: https://github.com/attakdefand/icadLS/blob/main/LICENSE
+
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns the health status of the API service
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+        '500':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+  /analyze:
+    post:
+      summary: Analyze code
+      description: Analyzes the provided code and returns detected algorithms and data structures
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The code to analyze
+                  example: "fn main() { let vec = vec![1, 2, 3]; }"
+              required:
+                - code
+      responses:
+        '200':
+          description: Successful analysis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  algorithms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        category:
+                          type: string
+                        complexity:
+                          type: string
+                        description:
+                          type: string
+                        wikipedia_url:
+                          type: string
+                  data_structures:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        wikipedia_url:
+                          type: string
+                  recommendations:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    Algorithm:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the algorithm
+        category:
+          type: string
+          description: Category of the algorithm
+        complexity:
+          type: string
+          description: Time and space complexity
+        description:
+          type: string
+          description: Description of the algorithm
+        wikipedia_url:
+          type: string
+          description: Link to Wikipedia page
+      example:
+        name: "Bubble Sort"
+        category: "Sorting"
+        complexity: "O(n²)"
+        description: "A simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order."
+        wikipedia_url: "https://en.wikipedia.org/wiki/Bubble_sort"
+
+    DataStructure:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the data structure
+        description:
+          type: string
+          description: Description of the data structure
+        wikipedia_url:
+          type: string
+          description: Link to Wikipedia page
+      example:
+        name: "Vector"
+        description: "A contiguous growable array type with heap-allocated contents."
+        wikipedia_url: "https://en.wikipedia.org/wiki/Dynamic_array"
+
+    AnalysisResult:
+      type: object
+      properties:
+        algorithms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Algorithm'
+        data_structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStructure'
+        recommendations:
+          type: array
+          items:
+            type: string

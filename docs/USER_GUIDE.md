@@ -1,129 +1,156 @@
-# User Guide
+# ICALDS User Guide
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Web Interface Usage](#web-interface-usage)
+- [Command-Line Tool Usage](#command-line-tool-usage)
+- [REST API Usage](#rest-api-usage)
+- [Understanding the Results](#understanding-the-results)
+- [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
-ICALDS (Identify Codes, Algorithms, and Data Structures) is a tool that helps you analyze code to identify patterns, algorithms, and data structures. It provides multiple interfaces for different use cases.
+ICALDS (Intelligent Code Analysis and Learning Detection System) is a powerful tool designed to analyze code and identify algorithms, data structures, and provide educational insights. Whether you're a student learning programming concepts or a developer looking to understand code patterns, ICALDS can help.
 
 ## Installation
 
 ### Prerequisites
 
-- Rust toolchain (https://www.rust-lang.org/tools/install)
-- Docker and Docker Compose (for containerized deployment)
-- For web interface: trunk (https://trunkrs.dev/)
+- Rust 1.70 or later
+- Docker (optional, for containerized deployment)
+- MySQL (for persistent storage)
 
-### Building from Source
+### Quick Start with Docker
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd icalds
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/attakdefand/icadLS.git
+   cd icadLS
+   ```
 
-# Build all components
-cargo build --workspace
-```
-
-## Usage
-
-### Web Interface
-
-The easiest way to use ICALDS is through the web interface:
-
-1. Start the services:
+2. Navigate to the infrastructure directory:
    ```bash
    cd infra
+   ```
+
+3. Start the services:
+   ```bash
    docker-compose up
    ```
 
-2. Open your browser and navigate to http://localhost:8080
+4. Access the web interface at http://localhost:8080
 
-3. Paste your code in the text area and click "Analyze Code"
+### Development Setup
 
-### Command-Line Tool
+For detailed development setup instructions, see [HOW_TO_RUN.md](../HOW_TO_RUN.md).
 
-For local analysis without the web interface:
+## Web Interface Usage
+
+The web interface provides an easy-to-use graphical way to analyze code:
+
+1. Navigate to http://localhost:8080 (or your deployment URL)
+2. Paste your code into the text area
+3. Click the "Analyze" button
+4. Review the results in the analysis panel
+
+### Web Interface Features
+
+- **Real-time Analysis**: Get instant feedback on your code
+- **Interactive Results**: Click on detected algorithms and data structures for more information
+- **Educational Content**: Access Wikipedia links for deeper understanding
+- **Performance Recommendations**: Get suggestions for code optimization
+
+## Command-Line Tool Usage
+
+ICALDS provides a powerful command-line tool for local analysis:
+
+### Basic Usage
 
 ```bash
 # Analyze a file
-cargo run --bin analyze-algos -- --file path/to/your/code.rs
+cargo run --bin analyze-algos -- --file examples/sample_code.rs
 
-# Analyze code directly
-cargo run --bin analyze-algos -- --code "fn main() { println!(\"Hello\"); }"
-
-# Get JSON output
-cargo run --bin analyze-algos -- --file path/to/your/code.rs --format json
+# Analyze code from stdin
+echo "fn main() { let vec = vec![1, 2, 3]; }" | cargo run --bin analyze-algos -- --stdin
 ```
 
-### REST API
-
-For programmatic access, you can use the REST API:
+### Output Formats
 
 ```bash
-# Health check
-curl http://localhost:8081/health
+# Get JSON output for programmatic use
+cargo run --bin analyze-algos -- --file examples/sample_code.rs --format json
 
-# Analyze code
+# Get detailed output
+cargo run --bin analyze-algos -- --file examples/sample_code.rs --verbose
+```
+
+### Command-Line Options
+
+- `--file <PATH>`: Analyze code from a file
+- `--stdin`: Read code from standard input
+- `--format <FORMAT>`: Output format (text, json)
+- `--verbose`: Enable verbose output
+- `--help`: Show help information
+
+## REST API Usage
+
+The REST API provides programmatic access to ICALDS functionality:
+
+### Health Check
+
+```bash
+curl http://localhost:8081/health
+```
+
+### Analyze Code
+
+```bash
 curl -X POST http://localhost:8081/analyze \
   -H "Content-Type: application/json" \
   -d '{"code": "fn main() { let vec = vec![1, 2, 3]; }"}'
 ```
 
-## Features
+### API Endpoints
 
-### Pattern Detection
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Check service health |
+| `/analyze` | POST | Analyze provided code |
 
-ICALDS can identify common coding patterns such as:
-- Range-based loops
-- Recursive functions
-- Iterator usage
+For detailed API documentation, see [API Documentation](API/openapi.yaml).
 
-### Algorithm Identification
+## Understanding the Results
 
-The tool recognizes various algorithmic approaches:
-- Sorting algorithms
-- Search algorithms
-- Graph traversal
+### Algorithms
 
-### Data Structure Detection
+When ICALDS detects algorithms in your code, it provides:
 
-ICALDS identifies data structures in your code:
-- Dynamic arrays (Vec)
-- Hash maps
-- Linked lists
-- Trees and graphs
+- **Name**: The name of the algorithm
+- **Category**: The category (e.g., Sorting, Searching)
+- **Complexity**: Time and space complexity analysis
+- **Description**: Detailed explanation of the algorithm
+- **Wikipedia Link**: External resource for deeper learning
 
-### Complexity Analysis
+### Data Structures
 
-Get an estimate of your code's complexity:
-- Low (0-50 lines)
-- Medium (51-100 lines)
-- High (100+ lines)
+For data structures, you'll see:
+
+- **Name**: The name of the data structure
+- **Description**: Explanation of the data structure
+- **Wikipedia Link**: External resource for more information
 
 ### Recommendations
 
-Receive suggestions for improvement:
-- Code organization
-- Documentation
-- Performance optimizations
+ICALDS may provide performance recommendations such as:
 
-## Example Analysis
+- Suggestions for more efficient algorithms
+- Tips for optimizing code patterns
+- Best practices for specific use cases
 
-Given the following code:
-```rust
-fn main() {
-    let vec = vec![1, 2, 3, 4, 5];
-    for i in 0..<vec.len() {
-        println!("{}", vec[i]);
-    }
-}
-```
+## Troubleshooting
 
-ICALDS would identify:
-- Pattern: Range-based loop
-- Data structure: Dynamic array
-- Complexity: Low
-- Recommendation: Consider using an iterator instead of indexing
+If you encounter issues, check the [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) guide for solutions to common problems.
 
-## Contributing
-
-Contributions are welcome! Please see the development guide for information on how to contribute new analysis capabilities or improve existing ones.
+For additional help, please [open an issue](https://github.com/attakdefand/icadLS/issues) on GitHub.
