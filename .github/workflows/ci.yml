@@ -13,8 +13,8 @@ jobs:
       
       - name: Rust build & test
         run: |
-          cargo build --workspace || true
-          cargo test --workspace || true
+          cargo build --workspace
+          cargo test --workspace
       
       - name: Run Clippy
         run: |
@@ -24,38 +24,17 @@ jobs:
         run: |
           cargo fmt --all -- --check
       
-      - name: Build WASM client
+      - name: Setup Rust for WASM
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      
+      - name: Install Trunk
         uses: jetli/trunk-action@v0.5.0
         with: 
           version: 'latest'
       
-      - name: trunk build
+      - name: Build WASM client
         working-directory: clients/web-advisor-wasm
         run: |
-          rustup target add wasm32-unknown-unknown
           trunk build --release
-
-  coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: llvm-tools-preview
-      
-      - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@cargo-llvm-cov
-      
-      - name: Generate code coverage
-        run: |
-          cargo llvm-cov --workspace --lcov --output-path lcov.info
-      
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          file: lcov.info
-          fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
