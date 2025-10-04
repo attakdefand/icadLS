@@ -339,6 +339,27 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             color: var(--danger-color);
         }
 
+        .github-pages-note {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .github-pages-note h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .github-pages-note ul {
+            padding-left: 20px;
+        }
+
+        .github-pages-note li {
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -357,7 +378,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             }
         }
     </style>
-<link rel="modulepreload" href="/web-advisor-wasm-86d586a9100540e5.js" crossorigin="anonymous" integrity="sha384-SDQbQm8aZU2GBf5JEEOhvF7L8t9Sw29x/1F8aLReAEE4RHzoWDpFhC62PHYV4JM9"><link rel="preload" href="/web-advisor-wasm-86d586a9100540e5_bg.wasm" crossorigin="anonymous" integrity="sha384-iNw51e4WyXhE5bDP1i+ApsoaDRdsWzQ8UHHSzZQj4SAEbWZM2vKhGGQg5SaLDWNG" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/web-advisor-wasm-86d586a9100540e5.js" crossorigin="anonymous" integrity="sha384-65AaKhL1rxS4CCkjUetgJDv7IdzwjfX41aRNga6RuW1nDv3vp3zCt2l4cahkTf3Z"><link rel="preload" href="/web-advisor-wasm-86d586a9100540e5_bg.wasm" crossorigin="anonymous" integrity="sha384-vubeorXGhsJYFOhDSgvOaRdJ7jUv/o8TP9bZXqz6upcAQSunyfhf+6CzjG1nrOPs" as="fetch" type="application/wasm"></head>
 <body>
     <div class="container">
         <header>
@@ -382,9 +403,19 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
                     </div>
                 </div>
                 
+                <div class="github-pages-note">
+                    <h3><i class="fas fa-info-circle"></i> GitHub Pages Demo Version</h3>
+                    <p>This is a static demo version of ICALDS hosted on GitHub Pages. For the full interactive experience with real code analysis:</p>
+                    <ul>
+                        <li>Clone the repository and run it locally with the API server</li>
+                        <li>Or check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for installation instructions</li>
+                    </ul>
+                    <p>Click "Analyze Code" below to see sample analysis results.</p>
+                </div>
+                
                 <div id="api-status" class="api-status">
-                    <i class="fas fa-circle-notch fa-spin"></i>
-                    <span>Connecting to analysis engine...</span>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Demo Mode - Sample Results</span>
                 </div>
                 
                 <div>
@@ -437,41 +468,61 @@ fn main() {
                     <div class="result-header">
                         <div class="card-header">
                             <i class="fas fa-chart-bar card-icon"></i>
-                            <h2 class="card-title">Analysis Results & Educational Insights</h2>
+                            <h2 class="card-title">Sample Analysis Results & Educational Insights</h2>
                         </div>
-                        <div id="complexity-badge" class="badge"></div>
+                        <div id="complexity-badge" class="badge badge-warning">Complexity: Medium</div>
                     </div>
                     
                     <div class="result-grid">
                         <div class="result-card">
                             <h3 class="result-card-title"><i class="fas fa-project-diagram"></i> Patterns Detected</h3>
-                            <ul id="patterns-list" class="result-list"></ul>
+                            <ul id="patterns-list" class="result-list">
+                                <li>Nested loop pattern</li>
+                                <li>Array traversal</li>
+                                <li>Element swapping</li>
+                                <li>Conditional comparison</li>
+                            </ul>
                         </div>
                         
                         <div class="result-card">
                             <h3 class="result-card-title"><i class="fas fa-cogs"></i> Algorithms Detected</h3>
-                            <ul id="algorithms-list" class="result-list"></ul>
+                            <ul id="algorithms-list" class="result-list">
+                                <li>Bubble Sort</li>
+                                <li>Array Printing</li>
+                            </ul>
                         </div>
                         
                         <div class="result-card">
                             <h3 class="result-card-title"><i class="fas fa-database"></i> Data Structures Detected</h3>
-                            <ul id="data-structures-list" class="result-list"></ul>
+                            <ul id="data-structures-list" class="result-list">
+                                <li>Vector (Dynamic Array)</li>
+                                <li>Primitive Types (i32)</li>
+                            </ul>
                         </div>
                     </div>
                     
                     <div class="result-card">
                         <h3 class="result-card-title"><i class="fas fa-graduation-cap"></i> Detailed Algorithm Information</h3>
-                        <ul id="detailed-algorithms-list" class="result-list"></ul>
+                        <ul id="detailed-algorithms-list" class="result-list">
+                            <li><strong>Bubble Sort</strong> (Sorting)<br><small>A simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.</small><br><a href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank">Learn more on Wikipedia</a></li>
+                        </ul>
                     </div>
                     
                     <div class="result-card">
                         <h3 class="result-card-title"><i class="fas fa-database"></i> Detailed Data Structure Information</h3>
-                        <ul id="detailed-data-structures-list" class="result-list"></ul>
+                        <ul id="detailed-data-structures-list" class="result-list">
+                            <li><strong>Vector</strong> (Dynamic Array)<br><small>A contiguous growable array type with heap-allocated contents.</small><br><a href="https://en.wikipedia.org/wiki/Dynamic_array" target="_blank">Learn more on Wikipedia</a></li>
+                        </ul>
                     </div>
                     
                     <div class="result-card">
                         <h3 class="result-card-title"><i class="fas fa-lightbulb"></i> Recommendations</h3>
-                        <ul id="recommendations-list" class="result-list"></ul>
+                        <ul id="recommendations-list" class="result-list">
+                            <li>Consider using more efficient sorting algorithms like Quick Sort or Merge Sort for larger datasets</li>
+                            <li>The current implementation has O(n²) time complexity</li>
+                            <li>For better performance with large arrays, consider using the built-in sort() method</li>
+                            <li>Check out our <a href="https://github.com/attakdefand/icadLS" target="_blank">GitHub repository</a> for the full interactive version</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -480,10 +531,38 @@ fn main() {
         <footer>
             <p>ICALDS - Identify Codes, Algorithms, and Data Structures</p>
             <p>Powered by Rust and WebAssembly</p>
+            <p><a href="https://github.com/attakdefand/icadLS" target="_blank">View on GitHub</a></p>
         </footer>
     </div>
 
     <div id="root"></div>
+
+    <script>
+        // Simple JavaScript to handle the demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const resultsContainer = document.getElementById('results-container');
+            
+            analyzeBtn.addEventListener('click', function() {
+                // Show loading state
+                analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+                analyzeBtn.disabled = true;
+                
+                // Simulate analysis delay
+                setTimeout(function() {
+                    // Show results
+                    resultsContainer.style.display = 'block';
+                    
+                    // Reset button
+                    analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Code';
+                    analyzeBtn.disabled = false;
+                    
+                    // Scroll to results
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+            });
+        });
+    </script>
 <script>"use strict";
 
 (function () {
@@ -615,3 +694,4 @@ fn main() {
 })()
 </script></body>
 </html>
+```

@@ -26,6 +26,8 @@ ICALDS (Intelligent Code Analysis and Learning Detection System) is an advanced 
 
 Check out the live demo of ICALDS: [https://attakdefand.github.io/icadLS](https://attakdefand.github.io/icadLS)
 
+**Note:** The GitHub Pages demo is a static version that shows sample results. For the full interactive experience with real code analysis, you need to run the application locally with the API server.
+
 ## Getting Started
 
 ### Option 1: Using Docker (Recommended for quick start)
@@ -66,6 +68,15 @@ The web interface is built with:
 To customize the web interface, modify:
 - `clients/web-advisor-wasm/index.html` - Main HTML structure and styling
 - `clients/web-advisor-wasm/src/lib.rs` - Application logic
+
+### GitHub Pages Deployment
+
+The web interface is automatically deployed to GitHub Pages using GitHub Actions. The deployed version runs in demo mode with sample results since GitHub Pages cannot host the backend API.
+
+For the full interactive experience:
+1. Clone this repository
+2. Follow the local setup instructions in [HOW_TO_RUN.md](HOW_TO_RUN.md)
+3. Run both the API server and web interface locally
 
 ## Verification Scripts
 
